@@ -1,0 +1,62 @@
+\section{Conclusioni}
+
+\subsection{Sentiment vs Syntax vs Subtree}
+
+I modelli allenati sulla sintassi hanno mostrato prestazioni inferiori 
+rispetto agli altri due approcci. Questa differenza è particolarmente evidente 
+nell'analisi su tutti i nodi dell'albero. Tale risultato è prevedibile dato 
+che il treebank di test utilizza etichette di riferimento non incluse
+nel treebank di allenamento dei modelli, rendendo il confronto meno rilevante.\\
+Nonostante ciò, anche limitando l'analisi alla radice dell'albero, i modelli 
+basati sulla sintassi hanno registrato performance inferiori. Tale tendenza non 
+si verifica nella regressione. \\
+Al contrario, i modelli che integrano l'analisi del sentiment con quella
+sintattica tendono a superare quelli basati esclusivamente sul sentiment, anche
+se i risultati sono simili quando si focalizzano sulla predizione del target
+alla radice dell'albero.\\
+In aggiunta, i modelli allenati sui sottoalberi hanno dimostrato un'efficacia
+notevolmente superiore nella classificazione dei pattern su ogni nodo, pur
+mantenendo risultati comparabili a quelli dei modelli basati sul sentiment per
+quanto riguarda la radice.
+
+\subsection{Kernel Methods vs RNN}
+
+Le tecniche basate su Kernel Methods, quando applicate ai sottoalberi, hanno
+evidenziato performance superiori rispetto alle RNN. \\
+Invece, le RNN si distinguono nettamente nell'identificazione dei pattern su 
+ciascun nodo dell'albero rispetto modelli rimanenti (modello allenato su 
+sentiment \& co.).\\
+Si osserva, inoltre, che nei risultati relativi alla radice dell'albero, il
+modello che combina il sentiment con i Kernel Methods supera
+significativamente le RNN (0.12), evidenziando un divario maggiore di quello 
+notato tra le RNN e il Kernel Method allenato sulla sintassi (0.3).\\
+In ogni caso, è importante notare che il modello RNN ha dimensione fissa
+rispetto al numero di unità nascoste scelte per la rete, d'altro canto i kernel
+method aumentano di dimensione con il numero di pattern nel treebank di
+allenamento, per questo motivo su un dataset più grande i kernel method
+potrebbero risultare poco efficienti o addirittura non utilizzabili.
+
+\subsection{Iperparametri}
+
+Putroppo non è stato possibile eseguire un'analisi accurata degli iperparametri
+perché il software trovato fallisce nel calcolo delle performance dei modelli
+oppure non è in grado di classificare i pattern come richiesto.\\
+I risultati mostrano che l'iperparametro 'W', ovvero forest sum, non è
+rilevante, infatti qualunque valore assuma non influisce sulle performance del
+modello.\\
+La normalizzazione degli alberi tendenzialmente peggiora le performance dei 
+modelli e ne allunga il tempo di allenamento. 
+Infine, il decay factor migliore risulta essere di 0.4 per i modelli subset
+tree, partial tree, mentre il subset tree-bow kernel con decay factor di 0.45
+ottiene un'accuratezza migliore.\\
+Infine si nota che i modelli subset tree, subset tree-bow e partial tree
+ottengono performance comparabili: più del 55\% di accuratezza nella
+classificazione dei pattern sulla radice dell'albero. Mentre il modello con
+kernel subtree raggiunge un'accuratezza poco inferiore al 42\%, simile all'RNN
+con 50 unità nascoste.\\
+Infine, si nota come le informazioni sintattiche aggiuntive non migliorino le
+performance dei modelli, ma le peggiorino. Probabilmente si ottiene questo
+risultato perché le frasi sono già divise in sottoalberi secondo la sintassi e
+probabilmente è questa l'informazione sintattica che i modelli utilizzano per
+classificare i pattern, mentre le etichette di sintassi aggiuntive non sono
+rilevanti.
